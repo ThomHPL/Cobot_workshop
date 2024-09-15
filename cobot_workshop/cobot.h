@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <Arduino.h>
 
-#define FS 100
+#define FS 50
 #define TS 1000/FS
 #define MAX_V 100 // °/sec
 

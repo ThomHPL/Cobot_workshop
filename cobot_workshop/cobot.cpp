@@ -2,8 +2,15 @@
 
 // execute the callback with the timer 2 for every created instance of cobot
 ISR(TIMER2_COMPA_vect) {
+  static bool first = true;
+  if(first){
+    first = false;
+  }
+  else{
+    first = true;
   for(int i = 0; i < Cobot::instanceCount; i++){
     Cobot::instances[i]->control_callback();
+  }
   }
 }
 
