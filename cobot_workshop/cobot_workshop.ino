@@ -12,24 +12,16 @@ const int trigPin = 2;
 DistanceSensor sensor(trigPin, echoPin);
 
 // create cobot instance
-// Cobot cobot;
-DynaServo middle, left, claw;
-DynaServo right = DynaServo(true);
+Cobot cobot;
+// DynaServo middle, left, claw;
+// DynaServo right = DynaServo(true);
 
 void setup() 
 { 
   // Init cobot with motor pins
-  //cobot.init(11, 10, 9, 6);
-  //cobot.home();
-  claw.attach(6, 180);
-  delay(200);
-  middle.attach(11,80);
-  delay(200);
-  left.attach(10,100);
-  delay(200);
-  right.attach(9,100);
-  delay(200);
-
+  cobot.init(11, 10, 9, 6);
+  cobot.home();
+  
   Serial.begin(9600);
   delay(1000);
 }
@@ -38,35 +30,35 @@ void loop()
 { 
   // go up and left
   Serial.println("Open");
-  claw.move(30);
+  cobot.claw.move(30);
   delay(200);
-  middle.move(160);
-  left.move(110);
-  right.move(110);
-  while(middle.moving()){
+  cobot.middle.move(160);
+  cobot.left.move(110);
+  cobot.right.move(110);
+  while(cobot.moving()){
     delay(10);
   }
   delay(500);
 
   // close claw
   Serial.println("Close");
-  claw.move(90);
-  while(claw.moving()){
+  cobot.claw.move(90);
+  while(cobot.moving()){
     delay(10);
   }
   delay(500);
 
   // go right
-  middle.move(10);
-  while(middle.moving()){
+  cobot.middle.move(10);
+  while(cobot.moving()){
     delay(10);
   }
 
   // go down and open claw
   Serial.println("Down");
-  left.move(30);
-  right.move(30);
-  while(right.moving()){
+  cobot.left.move(30);
+  cobot.right.move(30);
+  while(cobot.moving()){
     delay(10);
   }
 }

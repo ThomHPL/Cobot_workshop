@@ -5,15 +5,8 @@ int DynaServo::instanceCount = 0;  // Number of active instances
 bool DynaServo::timer_initialized = false;
 
 ISR(TIMER2_COMPA_vect) {
-  static bool first = true;
-  if(first){
-    first = false;
-  }
-  else{
-    first = true;
-    for(int i = 0; i < DynaServo::instanceCount; i++){
-      DynaServo::instances[i]->control_callback();
-    }
+  for(int i = 0; i < DynaServo::instanceCount; i++){
+    DynaServo::instances[i]->control_callback();
   }
 }
 
@@ -92,11 +85,13 @@ int DynaServo::move(int target){
     target = map(target,0,180,180,0);
   }
   this->target_us = map(target,0,180,MIN_PULSE_WIDTH,MAX_PULSE_WIDTH);
+  this->speed_acc = 0;
   return this->target_us - this->current_us;
 }
 
 bool DynaServo::moving(){
-  return !(this->target_us == this->current_us);
+  // return fals if the difference between the target and current is less than 5
+  return abs(this->target_us - this->current_us) > 50;
 }
 
 uint8_t DynaServo::getTarget()
@@ -106,12 +101,16 @@ uint8_t DynaServo::getTarget()
 
 void DynaServo::control_callback(){
   this->current_us = this->readMicroseconds();
+  this->speed_acc += MAX_ACCEL / FS;
+  if(this->speed_acc >= this->max_speed){
+    this->speed_acc = this->max_speed;
+  }
   int delta = target_us-current_us;
   if(delta <= 0){
-    current_us -= max(delta,(MAX_V_US_FACTOR * this->max_speed )/(FS));
+    current_us -= max(delta,(MAX_V_US_FACTOR * this->speed_acc ) / FS);
   }
   else{
-    current_us += min(delta, (MAX_V_US_FACTOR * this->max_speed )/(FS));
+    current_us += min(delta, (MAX_V_US_FACTOR * this->speed_acc )/ FS);
   }
   this->writeMicroseconds(current_us);
   return current_us;

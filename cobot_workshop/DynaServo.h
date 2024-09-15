@@ -6,7 +6,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-#define FS 50
+#define FS 100
+#define MAX_ACCEL 1800 // °/sec²
 #define MAX_SPEED 180 // °/sec
 #define MAX_V_US_FACTOR 10
 
@@ -15,6 +16,7 @@ class DynaServo : public Servo {
     static const int maxInstances = 10;
     int pin;
     int max_speed = 100;
+    int speed_acc = 0;
     int current_us = 1500;
     int target_us = 1500;
     bool inverted = false;

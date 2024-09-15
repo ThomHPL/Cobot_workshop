@@ -15,7 +15,7 @@ class Cobot {
   public:
     DynaServo middle, left, right, claw;
     Cobot();
-    ~Cobot();
     void init(int middle_pin, int right_pin, int left_pin, int claw_pin);
     void home();
+    bool moving();
 };
