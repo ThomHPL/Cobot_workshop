@@ -3,9 +3,10 @@
 
 #define FS 50
 #define TS 1000/FS
-#define MAX_V 100 // °/sec
+#define MAX_V 40 // °/sec
+#define MAX_V_US_FACTOR 10
 
-int servo_to_pos(Servo servo, int target, int current);
+int servo_to_pos(Servo servo, int target);
 
 
 // Define the Cobot class
@@ -38,4 +39,5 @@ class Cobot {
     ~Cobot();
     void control_callback();
     void init(int middle_pin, int right_pin, int left_pin, int claw_pin);
+    void home();
 };

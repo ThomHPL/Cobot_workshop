@@ -8,21 +8,23 @@ ISR(TIMER2_COMPA_vect) {
   }
   else{
     first = true;
-  for(int i = 0; i < Cobot::instanceCount; i++){
-    Cobot::instances[i]->control_callback();
-  }
+      for(int i = 0; i < Cobot::instanceCount; i++){
+        Cobot::instances[i]->control_callback();
+      }
   }
 }
 
-int servo_to_pos(Servo servo, int target, int current){
-  int delta = target-current;
+int servo_to_pos(Servo servo, int target){
+  int target_us = map(target,0,180,MIN_PULSE_WIDTH,MAX_PULSE_WIDTH);
+  int current = servo.readMicroseconds();
+  int delta = target_us-current;
   if(delta <= 0){
-    current -= max(delta,MAX_V/FS);
+    current -= max(delta,(MAX_V_US_FACTOR * MAX_V)/(FS));
   }
   else{
-    current += min(delta,MAX_V/FS);
+    current += min(delta, (MAX_V_US_FACTOR * MAX_V)/(FS));
   }
-  servo.write(current);
+  servo.writeMicroseconds(current);
   return current;
 }
 
@@ -95,8 +97,8 @@ void Cobot::home() {
 }
 
 void Cobot::control_callback(){
-  left_pos = servo_to_pos(left, left_target, left_pos);
-  right_pos = servo_to_pos(right, map(left_target,0,180,180,0), right_pos);
-  middle_pos = servo_to_pos(middle,middle_target,middle_pos);
-  claw_pos = servo_to_pos(claw,claw_target,claw_pos);
+  left_pos = servo_to_pos(left, left_target);
+  right_pos = servo_to_pos(right, map(left_target,0,180,180,0));
+  middle_pos = servo_to_pos(middle,middle_target);
+  claw_pos = servo_to_pos(claw,claw_target);
 }
