@@ -1,5 +1,6 @@
 #include <Servo.h>
 #include "cobot.h"
+#include "DynaServo.h"
 
 #include <DistanceSensor.h>
 
@@ -11,57 +12,61 @@ const int trigPin = 2;
 DistanceSensor sensor(trigPin, echoPin);
 
 // create cobot instance
-Cobot cobot;
+// Cobot cobot;
+DynaServo middle, left, claw;
+DynaServo right = DynaServo(true);
 
 void setup() 
 { 
   // Init cobot with motor pins
-  cobot.init(11, 10, 9, 6);
-  cobot.home();
+  //cobot.init(11, 10, 9, 6);
+  //cobot.home();
+  claw.attach(6, 180);
+  delay(200);
+  middle.attach(11,80);
+  delay(200);
+  left.attach(10,100);
+  delay(200);
+  right.attach(9,100);
+  delay(200);
+
   Serial.begin(9600);
   delay(1000);
 }
 
 void loop()
 { 
-      
-  // int distance = sensor.getCM();
-
-  // // Write values to serial port
-  // Serial.print("Distance: ");
-  // Serial.print(distance);
-  // Serial.println("cm");
-  // if(distance == 0){
-  // }
-  // else if(distance <= 20){
-  //   left_target += 5*(20-distance);
-  // }
-  // else{
-  //   left_target = 30;
-  // }
-
   // go up and left
-  cobot.middle_target = 120;
-  cobot.left_target = 100;
-  delay(1000);
+  Serial.println("Open");
+  claw.move(30);
+  delay(200);
+  middle.move(160);
+  left.move(110);
+  right.move(110);
+  while(middle.moving()){
+    delay(10);
+  }
+  delay(500);
 
   // close claw
   Serial.println("Close");
-  cobot.claw_target = 90;
-  delay(1800);
+  claw.move(90);
+  while(claw.moving()){
+    delay(10);
+  }
+  delay(500);
 
   // go right
-  cobot.middle_target = 50;
-  delay(2000);
+  middle.move(10);
+  while(middle.moving()){
+    delay(10);
+  }
 
   // go down and open claw
   Serial.println("Down");
-  cobot.left_target = 30;
-  delay(2000);
-  Serial.println("Open");
-  cobot.claw_target = 30;
-  delay(500);
-
-  cobot.home();
-  delay(2000);
+  left.move(30);
+  right.move(30);
+  while(right.moving()){
+    delay(10);
+  }
 }
