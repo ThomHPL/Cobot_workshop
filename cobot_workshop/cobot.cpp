@@ -93,7 +93,7 @@ void Cobot::home() {
   left_target = 90;
   right_target = 90;
   middle_target = 90;
-  claw_target = 90;
+  claw_target = 25;
 }
 
 void Cobot::control_callback(){

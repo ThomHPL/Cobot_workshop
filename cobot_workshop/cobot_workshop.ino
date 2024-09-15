@@ -17,8 +17,9 @@ void setup()
 { 
   // Init cobot with motor pins
   cobot.init(11, 10, 9, 6);
-  
+  cobot.home();
   Serial.begin(9600);
+  delay(1000);
 }
 
 void loop()
@@ -39,12 +40,10 @@ void loop()
   //   left_target = 30;
   // }
 
-  // go up and left and open claw
-  Serial.println("Open");
-  cobot.claw_target = 30;
+  // go up and left
   cobot.middle_target = 120;
   cobot.left_target = 100;
-  delay(2000);
+  delay(1000);
 
   // close claw
   Serial.println("Close");
@@ -55,8 +54,14 @@ void loop()
   cobot.middle_target = 50;
   delay(2000);
 
-  // go down
+  // go down and open claw
   Serial.println("Down");
   cobot.left_target = 30;
+  delay(2000);
+  Serial.println("Open");
+  cobot.claw_target = 30;
+  delay(500);
+
+  cobot.home();
   delay(2000);
 }
