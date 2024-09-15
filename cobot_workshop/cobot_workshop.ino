@@ -39,27 +39,24 @@ void loop()
   //   left_target = 30;
   // }
 
-  // open claw
+  // go up and left and open claw
   Serial.println("Open");
   cobot.claw_target = 30;
-  delay(100);
-
-  // go up and left
   cobot.middle_target = 120;
   cobot.left_target = 100;
-  delay(1000);
+  delay(2000);
 
   // close claw
   Serial.println("Close");
   cobot.claw_target = 90;
-  delay(1000);
+  delay(1800);
 
   // go right
   cobot.middle_target = 50;
-  delay(1000);
+  delay(2000);
 
   // go down
   Serial.println("Down");
   cobot.left_target = 30;
-  delay(1000);
+  delay(2000);
 }
