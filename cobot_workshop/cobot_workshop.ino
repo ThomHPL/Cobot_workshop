@@ -13,8 +13,6 @@ DistanceSensor sensor(trigPin, echoPin);
 
 // create cobot instance
 Cobot cobot;
-// DynaServo middle, left, claw;
-// DynaServo right = DynaServo(true);
 
 void setup() 
 { 
@@ -28,27 +26,27 @@ void setup()
 
 void loop()
 { 
-  // go up and left
   Serial.println("Open");
-  cobot.claw.move(30);
+  cobot.claw.move(30); // bouge la pince à 30°
   delay(200);
+
+  // va en haut à gauche
   cobot.middle.move(160);
   cobot.left.move(110);
   cobot.right.move(110);
   while(cobot.moving()){
-    delay(10);
+    delay(10); // Tant que le cobot bouge, on attend
   }
   delay(500);
 
-  // close claw
   Serial.println("Close");
-  cobot.claw.move(90);
+  cobot.claw.move(90); // bouge la pince à 90°
   while(cobot.moving()){
     delay(10);
   }
   delay(500);
 
-  // go right
+  // va à droite
   cobot.middle.move(10);
   while(cobot.moving()){
     delay(10);
